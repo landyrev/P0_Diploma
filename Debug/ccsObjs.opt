@@ -1,1 +1,0 @@
-"./main.obj" "./Src/delay.obj" "../lnk_msp430fr5739.cmd" -l"libmath.a" -l"libc.a" 
