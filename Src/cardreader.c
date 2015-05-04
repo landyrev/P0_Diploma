@@ -50,12 +50,10 @@ __interrupt void P1INT() // Обработчик прерывания
 		cardIDnum++;
 		cardID<<=1;
 		cardID |= 1;
-		volatile unsigned short LocalcardID=0;
 		if (cardIDnum>=26)
 		{
 			cardID=~cardID>>1;
 			cardID&=0xFFFF;
-			LocalcardID=cardID;
 		}
 
 	}
