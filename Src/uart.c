@@ -6,6 +6,7 @@
  */
 #include <init.h>
 #include <uart.h>
+#include <stdio.h>
 
 void initUART()
 {
@@ -25,5 +26,7 @@ void initUART()
 
 void UARTsendChar (char ch)
 {
+	while (!(UCA0IFG&UCTXIFG));
+
 	UCA0TXBUF_L=ch;
 }
