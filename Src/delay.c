@@ -6,8 +6,7 @@
  */
 #include <msp430.h>
 #include <delay.h>
-
-#define SMCLK 250000
+#include <init.h>
 
 void delay(unsigned int ms)
 {
