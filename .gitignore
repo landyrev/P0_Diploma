@@ -77,3 +77,4 @@ $RECYCLE.BIN/
 
 # Eclipse Directories
 Debug/**
+.settings/**
