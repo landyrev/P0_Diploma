@@ -8,6 +8,7 @@
 #include <cardreader.h>
 #include <init.h>
 #include <msp430.h>
+#include <uart.h>
 
 void initCardReader()
 {
@@ -16,6 +17,9 @@ void initCardReader()
 	TB0CTL |= TBSSEL1 | ID1 | MC0 | TBCLR | TBIE;
 
 	P1DIR &= ~BIT3; //P1.3 Direction IN
+	P1DIR |= BIT4; //PP1.4 Direction OUT
+
+	P1OUT |= BIT4;
 
 	P1IES |= BIT3; 	//P1.3 Rising edge Interrupt
 	P1IFG &= ~BIT3;	//Clear P1.3 Interrupt Flag
@@ -54,6 +58,7 @@ __interrupt void P1INT() // Обработчик прерывания
 		{
 			cardID=~cardID>>1;
 			cardID&=0xFFFF;
+			UARTsendID("cardID",(short)cardID);
 		}
 
 	}
