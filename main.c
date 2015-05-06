@@ -15,11 +15,7 @@ int main(void)  //Main program
 
 	while(1)
 	{
-		UARTsendChar('a');
-		UARTsendChar('b');
-		UARTsendChar('c');
-		UARTsendChar('d');
-		__delay_cycles(100000);
+		__delay_cycles(1000000);
 	}
 
 	__no_operation();
