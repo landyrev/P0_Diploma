@@ -8,12 +8,12 @@
 #include <delay.h>
 #include <init.h>
 
-void delay(unsigned int ms)
+void delay_micro(unsigned int micros)
 {
 	timer0flag=0;
 	TA0CTL = 0;
-	TA0CCR0=ms*(SMCLK/8)/1000;
-	TA0CTL |= TASSEL1 | ID0 | ID1 | MC0 | TACLR | TAIE;
+	TA0CCR0=micros;
+	TA0CTL |= TASSEL1 | MC0 | TACLR | TAIE;
 	while (timer0flag==0)
 	{
 		;

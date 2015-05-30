@@ -8,6 +8,6 @@ int deviceInit()
 	   //Setting Clock
 	   CSCTL0_H = 0xA5; //Control word
 	   CSCTL3 = 0;	//Set all dividers to 0
-	   CSCTL3 |= DIVS0 | DIVS2; //Set SMCLK Divider to 8
+	   CSCTL3 |= DIVS0 | DIVS1; //Set SMCLK Divider to 8
 	   return 0;
 }

@@ -1,3 +1,3 @@
 unsigned short timer0flag;
 
-void delay(unsigned int ms);
+void delay_micro(unsigned int micros);
