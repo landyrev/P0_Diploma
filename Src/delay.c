@@ -10,20 +10,18 @@
 
 void delay_micro(unsigned int micros)
 {
-	timer0flag=0;
 	TA0CTL = 0;
 	TA0CCR0=micros;
-	TA0CTL |= TASSEL1 | MC0 | TACLR | TAIE;
-	while (timer0flag==0)
-	{
-		;
-	}
-
+	TA0CTL |= TASSEL1 | MC0 | TACLR;
+	while (!(TA0CTL&TAIFG));
+	TA0CTL = 0;
 }
 
-#pragma vector=TIMER0_A1_VECTOR
-__interrupt void T0INT()
+void delay(unsigned int millis)
 {
-	timer0flag=1;
-	TA0CTL=0;
+	TA0CTL = 0;
+	TA0CCR0=millis*125; //125 = (SMCLK/8)/1000 - количество тактов в одну мс.
+	TA0CTL |= TASSEL1 | ID0 | ID1 | MC0 | TACLR;
+	while (!(TA0CTL&TAIFG));
+	TA0CTL = 0;
 }
