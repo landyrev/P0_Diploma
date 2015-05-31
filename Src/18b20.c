@@ -6,6 +6,7 @@
  */
 #include <init.h>
 #include <onewire.h>
+#include <delay.h>
 
 unsigned short int temperatureRead()
 {
