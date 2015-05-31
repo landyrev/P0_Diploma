@@ -30,7 +30,6 @@ void OWputch(char c)
 	for (i=0; i<8; i++)
 	{
 		P1DIR |= BIT6;
-		unsigned int d=(c>>i)&1;
 		if (((c>>i)&1)==0)
 		{
 			P1OUT &= ~BIT6;
