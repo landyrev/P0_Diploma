@@ -24,7 +24,7 @@ void initUART()
 	UCA0BR0 = 26;                              // 9600 baud
 	UCA0BR1 = 0;
 	UCA0MCTLW |= 0x0000;                  // 250000/9600 - INT(250000/9600)=0.41
-										  // UCBRSx value = 0x53 (See UG)
+	// UCBRSx value = 0x53 (See UG)
 	UCA0CTL1 &= ~UCSWRST;                     // release from reset
 	UCA0IE |= UCRXIE;                         // Enable RX interrupt
 }
@@ -42,7 +42,7 @@ void UARTsemLeave()
 
 void UARTsendChar (char ch)
 {
-	while (!(UCA0IFG&UCTXIFG));
+	while (!(UCA0IFG&UCTXIFG));             // USCI_A0 TX buffer ready?
 	UCA0TXBUF_L=ch;
 }
 
@@ -79,41 +79,41 @@ void __attribute__ ((interrupt(USCI_A0_VECTOR))) USCI_A0_ISR (void)
 #error Compiler not supported!
 #endif
 {
-  switch(__even_in_range(UCA0IV,0x08))
-  {
-  case 0:break;                             // Vector 0 - no interrupt
-  case 2:                                   // Vector 2 - RXIFG
-    while (!(UCA0IFG&UCTXIFG));             // USCI_A0 TX buffer ready?
-    volatile char x=UCA0RXBUF-0x30;
-    UARTsemSet();
-    switch (x)
-    {
-    case 0:
-    	PJOUT ^= BIT0;
-    	if (PJOUT&BIT0) UARTsend("lamp0:1"); else UARTsend("lamp0:0");
-    	break;
-    case 1:
-    	PJOUT ^= BIT1;
-    	if (PJOUT&BIT1) UARTsend("lamp1:1"); else UARTsend("lamp1:0");
-    	break;
-    case 2:
-    	PJOUT ^= BIT2;
-    	if (PJOUT&BIT2) UARTsend("lamp2:1"); else UARTsend("lamp2:0");
-    	break;
-    case 3:
-    	PJOUT ^= BIT3;
-    	if (PJOUT&BIT3) UARTsend("lamp3:1"); else UARTsend("lamp3:0");
-    	break;
-    case 7:
-		if (PJOUT&BIT0) UARTsend("lamp0:1"); else UARTsend("lamp0:0");
-    	if (PJOUT&BIT1) UARTsend("lamp1:1"); else UARTsend("lamp1:0");
-    	if (PJOUT&BIT2) UARTsend("lamp2:1"); else UARTsend("lamp2:0");
-    	if (PJOUT&BIT3) UARTsend("lamp3:1"); else UARTsend("lamp3:0");
-    default: break;
-    }
-    break;
-  case 4:break;                             // Vector 4 - TXIFG
-  default: break;
-  }
-  UARTsemLeave();
+	volatile char x;
+	switch(__even_in_range(UCA0IV,0x08))
+	{
+	case 0:break;                             // Vector 0 - no interrupt
+	case 2:                                   // Vector 2 - RXIFG
+		x=UCA0RXBUF-0x30;
+		UARTsemSet();
+		switch (x)
+		{
+		case 0:
+			PJOUT ^= BIT0;
+			if (PJOUT&BIT0) UARTsend("lamp0:1"); else UARTsend("lamp0:0");
+			break;
+		case 1:
+			PJOUT ^= BIT1;
+			if (PJOUT&BIT1) UARTsend("lamp1:1"); else UARTsend("lamp1:0");
+			break;
+		case 2:
+			PJOUT ^= BIT2;
+			if (PJOUT&BIT2) UARTsend("lamp2:1"); else UARTsend("lamp2:0");
+			break;
+		case 3:
+			PJOUT ^= BIT3;
+			if (PJOUT&BIT3) UARTsend("lamp3:1"); else UARTsend("lamp3:0");
+			break;
+		case 7:
+			if (PJOUT&BIT0) UARTsend("lamp0:1"); else UARTsend("lamp0:0");
+			if (PJOUT&BIT1) UARTsend("lamp1:1"); else UARTsend("lamp1:0");
+			if (PJOUT&BIT2) UARTsend("lamp2:1"); else UARTsend("lamp2:0");
+			if (PJOUT&BIT3) UARTsend("lamp3:1"); else UARTsend("lamp3:0");
+		default: break;
+		}
+		break;
+		case 4:break;                             // Vector 4 - TXIFG
+		default: break;
+	}
+	UARTsemLeave();
 }
