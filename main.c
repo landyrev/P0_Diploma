@@ -1,22 +1,30 @@
-#include <stdio.h>
 #include <init.h>
 #include <uart.h>
 #include <delay.h>
-#include <cardreader.h>
+//#include <cardreader.h>
+#include <18b20.h>
+#include <bacnet.h>
+#include <crc.h>
 
 int main(void)  //Main program
 {
 	deviceInit();
 
-	initCardReader();
+	//initCardReader();
 	initUART();
 
 	__bis_SR_register(GIE); // Enable all interrupts
 
-	while(1)
-	{
-		__delay_cycles(1000000);
-	}
+	P3DIR |= BIT4;
+	P3OUT &= ~BIT4;
 
-	__no_operation();
+	unsigned short state=STATE_IDLE;
+	//while (1)
+	//{
+	BACnetRoutine(state);
+	//}
+
+	//__no_operation();
 }
+
+
